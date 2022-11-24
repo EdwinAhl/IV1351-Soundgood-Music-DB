@@ -1,5 +1,3 @@
-CREATE TYPE difficulty as ENUM('Easy', 'Intermediate', 'Advanced');
-
 INSERT INTO person(ssn, name, street, zip, city, mail, student_id)
 VALUES
 ('197001011234', 'Edwin Ahlstrand', 'Vägen1', '123 45', 'Stockholm', 'edwinahl@kth.se', 1),
@@ -33,13 +31,13 @@ VALUES
 
 INSERT INTO instructor(person_id, skill, instrument, available_from, available_to)
 VALUES
-(3, 'Easy', 'Guitarr', 2022-11-24, 2022-12-23),
+(3, 'Easy', 'Guitar', 2022-11-24, 2022-12-23),
 (4, 'Intermediate', 'Piano', 2022-01-15, 2022-06-14),
 (5, 'Advanced', 'Drums', 2023-01-01, 2023-03-15);
 
 INSERT INTO student(person_id, skill, instrument_to_learn)
 VALUES
-(6, 'Easy', 'Guitarr'),
+(6, 'Easy', 'Guitar'),
 (7, 'Intermediate', 'Piano'),
 (8, 'Advanced', 'Drums'),
 
@@ -51,23 +49,53 @@ INSERT INTO lease(student_id, start_day, end_day)
 VALUES
 (8, 2022-11-24, 2022-12-24);
 
+
+
 INSERT INTO rentable_instrument(type, price, quality, brand, lease_id)
 VALUES
-('Guitarr', 120, 'OK', 'Harley Benton'),
+('Guitar', 120, 'OK', 'Harley Benton'),
 ('Piano', 200, 'Very good', 'Roland'),
 ('Drums', 200, 'Well used', 'Ludwig', 1);
 
-INSERT INTO price(difficulty, base_price)
+INSERT INTO price(difficulty, lesson_type, base_price)
 VALUES
+('Easy', 'Individual', 100),
+('Easy', 'Group', 50),
+('Easy', 'Ensamble', 75),
 
-INSERT INTO individual_lesson(instructor_id, difficulty, instrument, date)
-VALUES
+('Intermediate', 'Individual', 200),
+('Intermediate', 'Group', 150),
+('Intermediate', 'Ensamble', 175),
 
-INSERT INTO group_lesson(instructor_id, difficulty, instrument, min_students, max_students, period)
-VALUES
+('Advanced', 'Individual', 300),
+('Advanced', 'Group', 250),
+('Advanced', 'Ensamble', 275),
 
-INSERT INTO ensamble(instructor_id, difficulty, instrument, min_students, max_students, period, genre)
+INSERT INTO lesson(instructor_id, difficulty, lesson_type, instrument)
 VALUES
+(1, 'Easy', 'Individual', 'Guitar'),
+(2, 'Intermediate', 'Group', 'Piano'),
+(3, 'Advanced', 'Ensamble', 'Drums');
+
+
+INSERT INTO group_lesson(lesson_id, min_students, max_students, start_time, end_time)
+VALUES
+(2, 10, 100, '2020-03-23 13:00', '2020-03-23 15:00'),
+(3, 10, 100, '2020-03-21 12:00', '2020-03-23 14:00');
+
+INSERT INTO individual_lesson(lesson_id, start_time)
+VALUES
+(1, 10, 100, '2020-03-23 13:00', '2020-03-24 16:00');
+
+INSERT INTO ensamble(lesson_id, genre)
+VALUES
+(3, 10, 100, 'Classical');
 
 INSERT INTO student_lesson(student_id, lesson_id)
 VALUES
+(1,1);
+(1,2);
+(2,3);
+(3,3);
+(4,3);
+(5,2);

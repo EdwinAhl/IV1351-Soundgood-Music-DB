@@ -21,17 +21,18 @@ ALTER TABLE phone ADD CONSTRAINT PK_phone PRIMARY KEY (id);
 
 
 CREATE TABLE price (
- difficulty VARCHAR(100) NOT NULL,
+ difficulty level NOT NULL,
+ lesson_type lesson_type NOT NULL,
  base_price INT NOT NULL
 );
 
-ALTER TABLE price ADD CONSTRAINT PK_price PRIMARY KEY (difficulty);
+ALTER TABLE price ADD CONSTRAINT PK_price PRIMARY KEY (difficulty,lesson_type);
 
 
 CREATE TABLE student (
  id INT GENERATED ALWAYS AS IDENTITY NOT NULL,
  person_id INT NOT NULL,
- skill VARCHAR(100),
+ skill level,
  instrument_to_learn VARCHAR(100)
 );
 
@@ -41,7 +42,7 @@ ALTER TABLE student ADD CONSTRAINT PK_student PRIMARY KEY (id);
 CREATE TABLE instructor (
  id INT GENERATED ALWAYS AS IDENTITY NOT NULL,
  person_id INT NOT NULL,
- skill VARCHAR(100) NOT NULL,
+ skill level NOT NULL,
  instrument VARCHAR(100) NOT NULL,
  availableFrom TIMESTAMP(100),
  availableTo TIMESTAMP(100)
@@ -63,7 +64,8 @@ ALTER TABLE lease ADD CONSTRAINT PK_lease PRIMARY KEY (id);
 CREATE TABLE lesson (
  id INT GENERATED ALWAYS AS IDENTITY NOT NULL,
  instructor_id INT,
- difficulty VARCHAR(100) NOT NULL,
+ difficulty level NOT NULL,
+ lesson_type lesson_type NOT NULL,
  instrument VARCHAR(100) NOT NULL
 );
 
@@ -146,7 +148,7 @@ ALTER TABLE lease ADD CONSTRAINT FK_lease_0 FOREIGN KEY (student_id) REFERENCES 
 
 
 ALTER TABLE lesson ADD CONSTRAINT FK_lesson_0 FOREIGN KEY (instructor_id) REFERENCES instructor (id);
-ALTER TABLE lesson ADD CONSTRAINT FK_lesson_1 FOREIGN KEY (difficulty) REFERENCES price (difficulty);
+ALTER TABLE lesson ADD CONSTRAINT FK_lesson_1 FOREIGN KEY (difficulty,lesson_type) REFERENCES price (difficulty,lesson_type);
 
 
 ALTER TABLE person_phone ADD CONSTRAINT FK_person_phone_0 FOREIGN KEY (person_id) REFERENCES person (id);

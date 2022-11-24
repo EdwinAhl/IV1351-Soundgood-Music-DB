@@ -6,7 +6,7 @@ CREATE TABLE person (
  zip VARCHAR(100) NOT NULL,
  city VARCHAR(100) NOT NULL,
  mail VARCHAR(100) NOT NULL,
- student_id INT GENERATED ALWAYS AS IDENTITY
+ student_id INT
 );
 
 ALTER TABLE person ADD CONSTRAINT PK_person PRIMARY KEY (id);
@@ -30,7 +30,7 @@ ALTER TABLE price ADD CONSTRAINT PK_price PRIMARY KEY (difficulty);
 
 CREATE TABLE student (
  id INT GENERATED ALWAYS AS IDENTITY NOT NULL,
- person_id INT GENERATED ALWAYS AS IDENTITY NOT NULL,
+ person_id INT NOT NULL,
  skill VARCHAR(100),
  instrument_to_learn VARCHAR(100)
 );
@@ -38,17 +38,9 @@ CREATE TABLE student (
 ALTER TABLE student ADD CONSTRAINT PK_student PRIMARY KEY (id);
 
 
-CREATE TABLE booking (
- id INT GENERATED ALWAYS AS IDENTITY NOT NULL,
- student_id INT GENERATED ALWAYS AS IDENTITY NOT NULL
-);
-
-ALTER TABLE booking ADD CONSTRAINT PK_booking PRIMARY KEY (id,student_id);
-
-
 CREATE TABLE instructor (
  id INT GENERATED ALWAYS AS IDENTITY NOT NULL,
- person_id INT GENERATED ALWAYS AS IDENTITY NOT NULL,
+ person_id INT NOT NULL,
  skill VARCHAR(100) NOT NULL,
  instrument VARCHAR(100) NOT NULL,
  available INTERVAL(100)
@@ -59,7 +51,7 @@ ALTER TABLE instructor ADD CONSTRAINT PK_instructor PRIMARY KEY (id);
 
 CREATE TABLE lease (
  id INT GENERATED ALWAYS AS IDENTITY NOT NULL,
- student_id INT GENERATED ALWAYS AS IDENTITY NOT NULL,
+ student_id INT NOT NULL,
  period INTERVAL(100) NOT NULL
 );
 
@@ -68,9 +60,7 @@ ALTER TABLE lease ADD CONSTRAINT PK_lease PRIMARY KEY (id);
 
 CREATE TABLE lesson (
  id INT GENERATED ALWAYS AS IDENTITY NOT NULL,
- booking_id INT GENERATED ALWAYS AS IDENTITY,
- instructor_id INT GENERATED ALWAYS AS IDENTITY,
- student_id INT GENERATED ALWAYS AS IDENTITY,
+ instructor_id INT,
  difficulty VARCHAR(100) NOT NULL,
  instrument VARCHAR(100) NOT NULL
 );
@@ -79,8 +69,8 @@ ALTER TABLE lesson ADD CONSTRAINT PK_lesson PRIMARY KEY (id);
 
 
 CREATE TABLE person_phone (
- person_id INT GENERATED ALWAYS AS IDENTITY NOT NULL,
- phone_id INT GENERATED ALWAYS AS IDENTITY NOT NULL
+ person_id INT NOT NULL,
+ phone_id INT NOT NULL
 );
 
 ALTER TABLE person_phone ADD CONSTRAINT PK_person_phone PRIMARY KEY (person_id,phone_id);
@@ -88,7 +78,7 @@ ALTER TABLE person_phone ADD CONSTRAINT PK_person_phone PRIMARY KEY (person_id,p
 
 CREATE TABLE rentable_instrument (
  id INT GENERATED ALWAYS AS IDENTITY NOT NULL,
- lease_id INT GENERATED ALWAYS AS IDENTITY,
+ lease_id INT,
  price INT NOT NULL,
  quality VARCHAR(100) NOT NULL,
  brand VARCHAR(100)
@@ -98,15 +88,23 @@ ALTER TABLE rentable_instrument ADD CONSTRAINT PK_rentable_instrument PRIMARY KE
 
 
 CREATE TABLE sibling_student (
- id INT GENERATED ALWAYS AS IDENTITY NOT NULL,
- student_id INT GENERATED ALWAYS AS IDENTITY NOT NULL
+ id INT NOT NULL,
+ student_id INT NOT NULL
 );
 
 ALTER TABLE sibling_student ADD CONSTRAINT PK_sibling_student PRIMARY KEY (id,student_id);
 
 
+CREATE TABLE student_lesson (
+ student_id INT NOT NULL,
+ lesson_id INT NOT NULL
+);
+
+ALTER TABLE student_lesson ADD CONSTRAINT PK_student_lesson PRIMARY KEY (student_id,lesson_id);
+
+
 CREATE TABLE group_lesson (
- lesson_id INT GENERATED ALWAYS AS IDENTITY NOT NULL,
+ lesson_id INT NOT NULL,
  min_students INT NOT NULL,
  max_students INT NOT NULL,
  period INTERVAL(100) NOT NULL
@@ -116,7 +114,7 @@ ALTER TABLE group_lesson ADD CONSTRAINT PK_group_lesson PRIMARY KEY (lesson_id);
 
 
 CREATE TABLE individual_lesson (
- lesson_id INT GENERATED ALWAYS AS IDENTITY NOT NULL,
+ lesson_id INT NOT NULL,
  date DATE NOT NULL
 );
 
@@ -124,7 +122,7 @@ ALTER TABLE individual_lesson ADD CONSTRAINT PK_individual_lesson PRIMARY KEY (l
 
 
 CREATE TABLE ensamble (
- lesson_id INT GENERATED ALWAYS AS IDENTITY NOT NULL,
+ lesson_id INT NOT NULL,
  genre VARCHAR(100)
 );
 
@@ -137,18 +135,14 @@ ALTER TABLE person ADD CONSTRAINT FK_person_0 FOREIGN KEY (student_id) REFERENCE
 ALTER TABLE student ADD CONSTRAINT FK_student_0 FOREIGN KEY (person_id) REFERENCES person (id);
 
 
-ALTER TABLE booking ADD CONSTRAINT FK_booking_0 FOREIGN KEY (student_id) REFERENCES student (id);
-
-
 ALTER TABLE instructor ADD CONSTRAINT FK_instructor_0 FOREIGN KEY (person_id) REFERENCES person (id);
 
 
 ALTER TABLE lease ADD CONSTRAINT FK_lease_0 FOREIGN KEY (student_id) REFERENCES student (id);
 
 
-ALTER TABLE lesson ADD CONSTRAINT FK_lesson_0 FOREIGN KEY (booking_id,student_id) REFERENCES booking (id,student_id);
-ALTER TABLE lesson ADD CONSTRAINT FK_lesson_1 FOREIGN KEY (instructor_id) REFERENCES instructor (id);
-ALTER TABLE lesson ADD CONSTRAINT FK_lesson_2 FOREIGN KEY (difficulty) REFERENCES price (difficulty);
+ALTER TABLE lesson ADD CONSTRAINT FK_lesson_0 FOREIGN KEY (instructor_id) REFERENCES instructor (id);
+ALTER TABLE lesson ADD CONSTRAINT FK_lesson_1 FOREIGN KEY (difficulty) REFERENCES price (difficulty);
 
 
 ALTER TABLE person_phone ADD CONSTRAINT FK_person_phone_0 FOREIGN KEY (person_id) REFERENCES person (id);
@@ -160,6 +154,10 @@ ALTER TABLE rentable_instrument ADD CONSTRAINT FK_rentable_instrument_0 FOREIGN 
 
 ALTER TABLE sibling_student ADD CONSTRAINT FK_sibling_student_0 FOREIGN KEY (id) REFERENCES student (id);
 ALTER TABLE sibling_student ADD CONSTRAINT FK_sibling_student_1 FOREIGN KEY (student_id) REFERENCES student (id);
+
+
+ALTER TABLE student_lesson ADD CONSTRAINT FK_student_lesson_0 FOREIGN KEY (student_id) REFERENCES student (id);
+ALTER TABLE student_lesson ADD CONSTRAINT FK_student_lesson_1 FOREIGN KEY (lesson_id) REFERENCES lesson (id);
 
 
 ALTER TABLE group_lesson ADD CONSTRAINT FK_group_lesson_0 FOREIGN KEY (lesson_id) REFERENCES lesson (id);

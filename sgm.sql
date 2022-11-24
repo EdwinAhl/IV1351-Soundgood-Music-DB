@@ -44,8 +44,8 @@ CREATE TABLE instructor (
  person_id INT NOT NULL,
  skill level NOT NULL,
  instrument VARCHAR(100) NOT NULL,
- availableFrom TIMESTAMP(100),
- availableTo TIMESTAMP(100)
+ available_from TIMESTAMP(100),
+ available_to TIMESTAMP(100)
 );
 
 ALTER TABLE instructor ADD CONSTRAINT PK_instructor PRIMARY KEY (id);
@@ -100,6 +100,14 @@ CREATE TABLE sibling_student (
 ALTER TABLE sibling_student ADD CONSTRAINT PK_sibling_student PRIMARY KEY (student_id1,student_id2);
 
 
+CREATE TABLE student_lesson (
+ student_id INT NOT NULL,
+ lesson_id INT NOT NULL
+);
+
+ALTER TABLE student_lesson ADD CONSTRAINT PK_student_lesson PRIMARY KEY (student_id,lesson_id);
+
+
 CREATE TABLE group_lesson (
  lesson_id INT NOT NULL,
  min_students INT NOT NULL,
@@ -117,14 +125,6 @@ CREATE TABLE individual_lesson (
 );
 
 ALTER TABLE individual_lesson ADD CONSTRAINT PK_individual_lesson PRIMARY KEY (lesson_id);
-
-
-CREATE TABLE student_lesson (
- student_id INT NOT NULL,
- lesson_id INT NOT NULL
-);
-
-ALTER TABLE student_lesson ADD CONSTRAINT PK_student_lesson PRIMARY KEY (student_id,lesson_id);
 
 
 CREATE TABLE ensamble (
@@ -162,15 +162,14 @@ ALTER TABLE sibling_student ADD CONSTRAINT FK_sibling_student_0 FOREIGN KEY (stu
 ALTER TABLE sibling_student ADD CONSTRAINT FK_sibling_student_1 FOREIGN KEY (student_id2) REFERENCES student (id);
 
 
+ALTER TABLE student_lesson ADD CONSTRAINT FK_student_lesson_0 FOREIGN KEY (student_id) REFERENCES student (id);
+ALTER TABLE student_lesson ADD CONSTRAINT FK_student_lesson_1 FOREIGN KEY (lesson_id) REFERENCES lesson (id);
+
+
 ALTER TABLE group_lesson ADD CONSTRAINT FK_group_lesson_0 FOREIGN KEY (lesson_id) REFERENCES lesson (id);
 
 
 ALTER TABLE individual_lesson ADD CONSTRAINT FK_individual_lesson_0 FOREIGN KEY (lesson_id) REFERENCES lesson (id);
-
-
-ALTER TABLE student_lesson ADD CONSTRAINT FK_student_lesson_0 FOREIGN KEY (student_id) REFERENCES student (id);
-ALTER TABLE student_lesson ADD CONSTRAINT FK_student_lesson_1 FOREIGN KEY (lesson_id) REFERENCES individual_lesson (lesson_id);
-ALTER TABLE student_lesson ADD CONSTRAINT FK_student_lesson_2 FOREIGN KEY (lesson_id) REFERENCES group_lesson (lesson_id);
 
 
 ALTER TABLE ensamble ADD CONSTRAINT FK_ensamble_0 FOREIGN KEY (lesson_id) REFERENCES group_lesson (lesson_id);

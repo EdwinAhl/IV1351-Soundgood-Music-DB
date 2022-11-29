@@ -106,10 +106,17 @@ VALUES
 
 INSERT INTO sibling_student(student_id1, student_id2)
 VALUES
+--1,2,3
 (1,2),
+(2,1),
 (1,3),
+(3,1),
 (2,3),
-(4,5);
+(3,2),
+
+--4,5
+(4,5),
+(5,4);
 
 INSERT INTO lease(student_id, start_day, end_day)
 VALUES

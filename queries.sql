@@ -1,4 +1,5 @@
 --A1: Show the number of lessons given per month during a specified year -------------------------------------
+
 SELECT COUNT(*) FROM
 	(SELECT start_time FROM group_lesson 
 		UNION ALL 
@@ -7,18 +8,21 @@ SELECT COUNT(*) FROM
 		EXTRACT(YEAR FROM start_time::timestamp)=2020 and 
 		EXTRACT(MONTH FROM start_time::timestamp)=03
 ;
+
 --------------------------------------------------------------------------------------------------------------
 
 
---A2 Show how many students there are with no sibling, with one sibling, with two siblings, etc --------------
-SELECT COUNT(*) FROM student INNER JOIN sibling_student 
-    ON student.id = sibling_student.student_id1  
-    OR student.id = sibling_student.student_id2
-;
+--A2: Show how many students there are with no sibling, with one sibling, with two siblings, etc -------------
+
+SELECT COUNT(*) AS no_students ,result.count AS no_siblings FROM (
+    SELECT COUNT(*) FROM sibling_student 
+    GROUP BY student_id1
+) AS result GROUP BY result.count ORDER BY no_siblings DESC;
+
 --------------------------------------------------------------------------------------------------------------
 
 
---List all instructors who has given more than a specific number of lessons during the current month. Sum all lessons, independent of type, and sort the result by the number of given lessons. ---------------------------
+--A3: List all instructors who has given more than a specific number of lessons during the current month. Sum all lessons, independent of type, and sort the result by the number of given lessons. ---------------------------
 
 
 
@@ -86,7 +90,7 @@ SELECT p.name, id_table.count
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
---List all ensembles held during the next week, sorted by music genre and weekday. For each ensemble tell whether it's full booked, has 1-2 seats left or has more seats left -------------------------
+--A4: List all ensembles held during the next week, sorted by music genre and weekday. For each ensemble tell whether it's full booked, has 1-2 seats left or has more seats left -------------------------
 
 -- code
 

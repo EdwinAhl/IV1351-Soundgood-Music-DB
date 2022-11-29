@@ -100,9 +100,9 @@ VALUES
 
 INSERT INTO instructor(person_id, skill, instrument, available_from, available_to)
 VALUES
-(3, 'Easy', 'Guitar', '2022-11-24', '2022-12-23'),
-(4, 'Intermediate', 'Piano', '2022-01-15', '2022-06-14'),
-(5, 'Advanced', 'Drums', '2023-01-01', '2023-03-15');
+(3, 'Easy', 'Guitar', '2022-11-24', '2022-12-23'), -- Medge
+(4, 'Intermediate', 'Piano', '2022-01-15', '2022-06-14'), -- Palmer
+(5, 'Advanced', 'Drums', '2023-01-01', '2023-03-15'); -- Emmanuel
 
 INSERT INTO sibling_student(student_id1, student_id2)
 VALUES
@@ -144,19 +144,27 @@ VALUES
 
 INSERT INTO lesson(instructor_id, difficulty, lesson_type, instrument)
 VALUES
-(1, 'Easy', 'Individual', 'Guitar'),
-(2, 'Intermediate', 'Group', 'Piano'),
-(3, 'Advanced', 'Ensamble', 'Drums');
+(1, 'Easy', 'Individual', 'Guitar'), --1
+(2, 'Intermediate', 'Group', 'Piano'), --2
+(3, 'Intermediate', 'Ensamble', 'Drums'), --3
+(3, 'Advanced', 'Group', 'Drums'), --4
+(3, 'Easy', 'Group', 'Drums'), --5
+(2, 'Advanced', 'Individual', 'Tambourine'), --6
+(1, 'Easy', 'Individual', 'Drums'); --7
 
 
 INSERT INTO group_lesson(lesson_id, min_students, max_students, start_time, end_time)
 VALUES
 (2, 10, 100, '2020-03-23 13:00', '2020-03-23 15:00'),
+(4, 10, 100, '2020-04-04 10:00', '2020-04-04 11:00'),
+(5, 50, 110, '2020-03-19 9:00', '2020-03-19 13:00'),
 (3, 10, 100, '2020-03-21 12:00', '2020-03-23 14:00');
 
 INSERT INTO individual_lesson(lesson_id, start_time)
 VALUES
-(1, '2020-03-23 13:00');
+(1, '2020-03-23 13:00'),
+(6, '2020-04-01 11:00'),
+(7, '2020-02-07 15:30');
 
 INSERT INTO ensamble(lesson_id, genre)
 VALUES

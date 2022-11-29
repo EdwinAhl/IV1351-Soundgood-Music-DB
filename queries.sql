@@ -20,7 +20,42 @@ SELECT COUNT(*) FROM student INNER JOIN sibling_student
 
 --List all instructors who has given more than a specific number of lessons during the current month. Sum all lessons, independent of type, and sort the result by the number of given lessons. ---------------------------
 
--- Select name and lesson count
+
+
+
+--- Using Views
+---------------------------------------------------------------------------------
+CREATE VIEW all_lesson_times AS
+SELECT start_time, lesson_id FROM group_lesson 
+	UNION ALL
+SELECT start_time, lesson_id FROM individual_lesson;
+
+CREATE VIEW monthly_lessons AS
+SELECT lesson_id, instructor_id FROM all_lesson_times
+INNER JOIN lesson AS all_lessons
+ON all_lesson_times.lesson_id = all_lessons.id
+WHERE EXTRACT(MONTH FROM start_time::timestamp)=03;
+
+SELECT p.name, id_table.count
+	FROM (SELECT instructors.person_id, COUNT(*)
+		FROM monthly_lessons
+		INNER JOIN
+		-- Join with instructors based on instruct id
+		instructor AS instructors
+		ON instructors.id = monthly_lessons.instructor_id 
+		-- Group by the instructor ids to get a count of lessons by instructor
+		GROUP BY monthly_lessons.instructor_id, instructors.id) as id_table
+
+	-- Join with person to get the names
+	INNER JOIN person as p
+	ON p.id = id_table.person_id
+	-- The amount of lessons in the month should be above a number
+	WHERE id_table.count > 0
+	-- Sort by the count
+	ORDER BY id_table.count DESC;
+
+--- Using nested queries
+---------------------------------------------------------------------------------
 SELECT p.name, id_table.count
 	FROM
 		(SELECT instructors.person_id, COUNT(*)

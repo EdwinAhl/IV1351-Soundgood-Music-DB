@@ -10,15 +10,15 @@ VALUES
 --Students
 ('202001011234','Wyatt Barker','Ap #380-7152 Sit St.','61418','Aisén','dolor.fusce@outlook.com', NULL),
 ('202001011234','Iris Lott','Ap #996-5511 Facilisis Av.','13516','Bhiwani','vehicula@icloud.org', NULL),
-('200401011234','Kirsten Peterson','Ap #938-2688 Nunc St.','650117','Devonport','risus.odio.auctor@yahoo.com', NULL);
-('197401011234',"Castor Singleton","608-8657 Egestas. Rd.","97024","Namen","luctus.felis@aol.com", NULL),
-('201301011234',"Conan Conrad","Ap #821-3487 Netus Rd.","M54 1NB","Ceará","sit@icloud.com", NULL),
-('200101011234',"Carla Ortiz","Ap #227-9009 Facilisis. Rd.","21414","Anambra","lacus.cras@aol.couk", NULL),
-('198401011234',"Colette Wilkins","968 Turpis. Rd.","19712","Trentino-Alto Adige","cras@aol.org", NULL),
-('200801011234',"Erin Dudley","4094 Eu Av.","2867","Rio de Janeiro","amet.massa@outlook.org", NULL);
-('197401011234',"Boa Walker","774-4306 Massa St.","8254","South Island","sem.ut@aol.edu", NULL),
-('197301011234',"Harding Hodge","P.O. Box 483, 195 Tincidunt St.","86280","Midi-Pyrénées","cursus.et@aol.org", NULL),
-('200701011234',"Ursula Reynolds","533-575 Non, Rd.","90582","Pernambuco","elit@outlook.org", NULL),
+('200401011234','Kirsten Peterson','Ap #938-2688 Nunc St.','650117','Devonport','risus.odio.auctor@yahoo.com', NULL),
+('197401011234','Castor Singleton','608-8657 Egestas. Rd.','97024','Namen','luctus.felis@aol.com', NULL),
+('201301011234','Conan Conrad','Ap #821-3487 Netus Rd.','M54 1NB','Ceará','sit@icloud.com', NULL),
+('200101011234','Carla Ortiz','Ap #227-9009 Facilisis. Rd.','21414','Anambra','lacus.cras@aol.couk', NULL),
+('198401011234','Colette Wilkins','968 Turpis. Rd.','19712','Trentino-Alto Adige','cras@aol.org', NULL),
+('200801011234','Erin Dudley','4094 Eu Av.','2867','Rio de Janeiro','amet.massa@outlook.org', NULL),
+('197401011234','Boa Walker','774-4306 Massa St.','8254','South Island','sem.ut@aol.edu', NULL),
+('197301011234','Harding Hodge','P.O. Box 483, 195 Tincidunt St.','86280','Midi-Pyrénées','cursus.et@aol.org', NULL),
+('200701011234','Ursula Reynolds','533-575 Non, Rd.','90582','Pernambuco','elit@outlook.org', NULL);
 
 INSERT INTO student(person_id, skill, instrument_to_learn)
 VALUES

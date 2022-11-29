@@ -1,31 +1,82 @@
 INSERT INTO person(ssn, name, street, zip, city, mail, student_id)
 VALUES
-('197001011234', 'Edwin Ahlstrand', 'Vägen1', '123 45', 'Stockholm', 'edwinahl@kth.se', NULL),
-('198401011234', 'Baltzar Lagerros', 'Vägen2', '987 65', 'Borås', 'baltzarl@kth.se', NULL),
+--Contact person (creators)
+('197001011234', 'Edwin Ahlstrand', 'Vagen1', '123 45', 'Stockholm', 'edwinahl@kth.se', NULL),
+('198401011234', 'Baltzar Lagerros', 'Vagen2', '987 65', 'Borås', 'baltzarl@kth.se', NULL),
+--Instructors
 ('201401011234','Medge Francis','Ap #381-534 Orci Rd.','88-455','Port Blair','fringilla@google.edu', NULL),
 ('199401011234','Palmer Gay','Ap #810-4547 Bibendum Road','87882','Mastung','et.libero@outlook.couk', NULL),
 ('199601011234','Emmanuel Higgins','464-5072 Aliquet Rd.','90246','Stellenbosch','nec.metus.facilisis@protonmail.com', NULL),
+--Students
 ('202001011234','Wyatt Barker','Ap #380-7152 Sit St.','61418','Aisén','dolor.fusce@outlook.com', NULL),
 ('202001011234','Iris Lott','Ap #996-5511 Facilisis Av.','13516','Bhiwani','vehicula@icloud.org', NULL),
-('200401011234','Kirsten Peterson','Ap #938-2688 Nunc St.','650117','Devonport','risus.odio.auctor@yahoo.com', NULL);
+('200401011234','Kirsten Peterson','Ap #938-2688 Nunc St.','650117','Devonport','risus.odio.auctor@yahoo.com', NULL),
+('197401011234','Castor Singleton','608-8657 Egestas. Rd.','97024','Namen','luctus.felis@aol.com', NULL),
+('201301011234','Conan Conrad','Ap #821-3487 Netus Rd.','M54 1NB','Ceará','sit@icloud.com', NULL),
+('200101011234','Carla Ortiz','Ap #227-9009 Facilisis. Rd.','21414','Anambra','lacus.cras@aol.couk', NULL),
+('198401011234','Colette Wilkins','968 Turpis. Rd.','19712','Trentino-Alto Adige','cras@aol.org', NULL),
+('200801011234','Erin Dudley','4094 Eu Av.','2867','Rio de Janeiro','amet.massa@outlook.org', NULL),
+('197401011234','Boa Walker','774-4306 Massa St.','8254','South Island','sem.ut@aol.edu', NULL),
+('197301011234','Harding Hodge','P.O. Box 483, 195 Tincidunt St.','86280','Midi-Pyrénées','cursus.et@aol.org', NULL),
+('200701011234','Ursula Reynolds','533-575 Non, Rd.','90582','Pernambuco','elit@outlook.org', NULL);
 
 INSERT INTO student(person_id, skill, instrument_to_learn)
 VALUES
-(1, 'Easy', 'Guitar'),
-(2, 'Intermediate', 'Piano'),
-(3, 'Advanced', 'Drums');
+(6, 'Easy', 'Guitar'),
+(7, 'Intermediate', 'Piano'),
+(8, 'Advanced', 'Drums'),
+(9, 'Easy', 'Drums'),
+(10, 'Easy', 'Piano'),
+(11, 'Easy', 'Tambourine'),
+(12, 'Intermediate', 'Drums'),
+(13, 'Intermediate', 'Guitar'),
+(14, 'Intermediate', 'Guitar'),
+(15, 'Advanced', 'Guitar'),
+(16, 'Advanced', 'Piano');
 
 UPDATE person
 SET student_id = 1
-WHERE id = 7;
+WHERE id = 6;
 
 UPDATE person
 SET student_id = 2
-WHERE id = 8;
+WHERE id = 7;
 
 UPDATE person
 SET student_id = 3
-WHERE id = 6;
+WHERE id = 8;
+
+UPDATE person
+SET student_id = 4
+WHERE id = 9;
+
+UPDATE person
+SET student_id = 5
+WHERE id = 10;
+
+UPDATE person
+SET student_id = 6
+WHERE id = 11;
+
+UPDATE person
+SET student_id = 7
+WHERE id = 12;
+
+UPDATE person
+SET student_id = 8
+WHERE id = 13;
+
+UPDATE person
+SET student_id = 9
+WHERE id = 14;
+
+UPDATE person
+SET student_id = 10
+WHERE id = 15;
+
+UPDATE person
+SET student_id = 11
+WHERE id = 16;
 
 INSERT INTO phone(phone_no)
 VALUES
@@ -55,7 +106,10 @@ VALUES
 
 INSERT INTO sibling_student(student_id1, student_id2)
 VALUES
-(2,3);
+(1,2),
+(1,3),
+(2,3),
+(4,5);
 
 INSERT INTO lease(student_id, start_day, end_day)
 VALUES

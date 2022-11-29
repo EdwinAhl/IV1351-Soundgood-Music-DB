@@ -3,13 +3,16 @@ SELECT COUNT(*) FROM
 	(SELECT start_time FROM group_lesson 
 		UNION ALL 
 	SELECT start_time FROM individual_lesson) as times
-
 	WHERE 
 		EXTRACT(YEAR FROM start_time::timestamp)=2020 and 
-		EXTRACT(MONTH FROM start_time::timestamp)=03;
+		EXTRACT(MONTH FROM start_time::timestamp)=03
+;
 
 --Show how many students there are with no sibling, with one sibling, with two siblings, etc.
-
+SELECT COUNT(*) FROM student INNER JOIN sibling_student 
+    ON student.id = sibling_student.student_id1  
+    OR student.id = sibling_student.student_id2
+;
 
 --List all instructors who has given more than a specific number of lessons during the current month. Sum all lessons, independent of type, and sort the result by the number of given lessons.
 

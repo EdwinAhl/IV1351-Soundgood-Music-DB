@@ -148,7 +148,9 @@ VALUES
 (3, 'Advanced', 'Group', 'Drums'), --4
 (3, 'Easy', 'Group', 'Drums'), --5
 (2, 'Advanced', 'Individual', 'Tambourine'), --6
-(1, 'Easy', 'Individual', 'Drums'); --7
+(1, 'Easy', 'Individual', 'Tambourine'), --7
+(1, 'Easy', 'Ensamble', 'Drums'), --8
+(1, 'Easy', 'Ensamble', 'Drums'); --9
 
 
 INSERT INTO group_lesson(lesson_id, min_students, max_students, start_time, end_time)
@@ -156,6 +158,8 @@ VALUES
 (2, 10, 100, '2020-03-23 13:00', '2020-03-23 15:00'),
 (4, 10, 100, '2020-04-04 10:00', '2020-04-04 11:00'),
 (5, 50, 110, '2020-03-19 9:00', '2020-03-19 13:00'),
+(9, 50, 110, '2022-12-07 9:00', '2022-12-07 9:00'),
+(8, 50, 20, '2022-12-12 9:00', '2022-12-12 9:00'),
 (3, 10, 100, '2020-03-21 12:00', '2020-03-23 14:00');
 
 INSERT INTO individual_lesson(lesson_id, start_time)
@@ -166,7 +170,9 @@ VALUES
 
 INSERT INTO ensamble(lesson_id, genre)
 VALUES
-(3, 'Classical');
+(3, 'Classical'),
+(8, 'Pop'),
+(9, 'Rock');
 
 INSERT INTO student_lesson(student_id, lesson_id)
 VALUES

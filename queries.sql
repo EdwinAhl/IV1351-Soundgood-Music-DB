@@ -30,7 +30,6 @@ SELECT type, COUNT(*) FROM
 		EXTRACT(MONTH FROM start_time::timestamp)=03
 	GROUP BY type;
 ;
-
 --------------------------------------------------------------------------------------------------------------
 
 
@@ -111,9 +110,13 @@ SELECT p.name, id_table.count
 
 --A4: List all ensembles held during the next week, sorted by music genre and weekday. For each ensemble tell whether it's full booked, has 1-2 seats left or has more seats left ---------------------
 
-CREATE VIEW ensambles_attendance AS
-SELECT COUNT(*), lesson_id FROM student_lesson JOIN ensamble USING(lesson_id) GROUP BY lesson_id;
+-- Create a small table with all ensambles with attendance
+CREATE OR REPLACE VIEW ensambles_attendance AS
+SELECT COUNT(*), lesson_id, genre FROM ensamble 
+JOIN student_lesson USING(lesson_id)
+GROUP BY lesson_id;
 
+-- Get remaining slots as 'No slots' or the remaining number, easily modifiable.
 CREATE OR REPLACE FUNCTION remaining_slots(max_students INT, count bigint)
 returns VARCHAR(500)
 language plpgsql AS
@@ -131,10 +134,21 @@ BEGIN
 END;
 $$;
 
-SELECT remaining_slots(max_students, count), * FROM ensambles_attendance
-    JOIN group_lesson AS g USING (lesson_id)
-    JOIN ensamble AS e USING (lesson_id)
-    WHERE start_time BETWEEN DATE_ADD(CURRENT_DATE, start_time - WEEKDAY(CURRENT_DATE)) and NOW()
+SELECT * FROM (
+	SELECT * FROM ensambles_attendance
+		UNION ALL
+	-- Need to also include all those ensambles with no attendance
+	SELECT 0 as count, lesson_id, genre FROM ensamble 
+		-- Remove the ones where we already have attendance
+		EXCEPT SELECT 0, lesson_id, genre FROM ensambles_attendance) AS ensambles_info
+    -- Join to get group info
+    JOIN group_lesson USING (lesson_id)
+    
+    -- Between the start of next week and the week after that
+    WHERE start_time BETWEEN 
+    	DATE_TRUNC('week', CURRENT_TIMESTAMP) + interval '1 week'
+    AND 
+    	DATE_TRUNC('week', CURRENT_TIMESTAMP) + interval '2 week'
     ORDER BY genre DESC, EXTRACT(Day FROM start_time::timestamp);
 
 

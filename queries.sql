@@ -9,6 +9,28 @@ SELECT COUNT(*) AS no_lessons FROM
 		EXTRACT(MONTH FROM start_time::timestamp)=03
 ;
 
+CREATE VIEW ensambles AS
+SELECT lesson_id, start_time FROM ensamble INNER JOIN group_lesson USING(lesson_id);
+
+CREATE VIEW group_lessons AS
+SELECT lesson_id, start_time FROM group_lesson EXCEPT SELECT * FROM ensambles;
+
+CREATE VIEW individual_lessons AS
+SELECT lesson_id, start_time FROM individual_lesson;
+
+--- Print as 3 rows 
+SELECT type, COUNT(*) FROM 
+	(SELECT *, 'Ensable' as type FROM ensambles
+		UNION ALL
+	SELECT *, 'Group' as type FROM group_lessons
+		UNION ALL 
+	SELECT *, 'Individual' as type FROM individual_lessons) as all_lessons
+	WHERE 
+		EXTRACT(YEAR FROM start_time::timestamp)=2020 AND 
+		EXTRACT(MONTH FROM start_time::timestamp)=03
+	GROUP BY type;
+;
+
 --------------------------------------------------------------------------------------------------------------
 
 
@@ -112,6 +134,7 @@ $$;
 SELECT remaining_slots(max_students, count), * FROM ensambles_attendance
     JOIN group_lesson AS g USING (lesson_id)
     JOIN ensamble AS e USING (lesson_id)
+    WHERE start_time BETWEEN DATE_ADD(CURRENT_DATE, start_time - WEEKDAY(CURRENT_DATE)) and NOW()
     ORDER BY genre DESC, EXTRACT(Day FROM start_time::timestamp);
 
 

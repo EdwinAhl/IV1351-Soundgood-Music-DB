@@ -1,11 +1,11 @@
 --A1: Show the number of lessons given per month during a specified year -------------------------------------
 
-SELECT COUNT(*) FROM
+SELECT COUNT(*) AS no_lessons FROM
 	(SELECT start_time FROM group_lesson 
 		UNION ALL 
 	SELECT start_time FROM individual_lesson) as times
 	WHERE 
-		EXTRACT(YEAR FROM start_time::timestamp)=2020 and 
+		EXTRACT(YEAR FROM start_time::timestamp)=2020 AND 
 		EXTRACT(MONTH FROM start_time::timestamp)=03
 ;
 

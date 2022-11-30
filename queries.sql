@@ -24,9 +24,6 @@ SELECT COUNT(*) AS no_students ,result.count AS no_siblings FROM (
 
 --A3: List all instructors who has given more than a specific number of lessons during the current month. Sum all lessons, independent of type, and sort the result by the number of given lessons. ---------------------------
 
-
-
-
 --- Using Views
 ---------------------------------------------------------------------------------
 CREATE VIEW all_lesson_times AS
@@ -90,8 +87,32 @@ SELECT p.name, id_table.count
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
---A4: List all ensembles held during the next week, sorted by music genre and weekday. For each ensemble tell whether it's full booked, has 1-2 seats left or has more seats left -------------------------
+--A4: List all ensembles held during the next week, sorted by music genre and weekday. For each ensemble tell whether it's full booked, has 1-2 seats left or has more seats left ---------------------
 
--- code
+CREATE VIEW ensambles_attendance AS
+SELECT COUNT(*), lesson_id FROM student_lesson JOIN ensamble USING(lesson_id) GROUP BY lesson_id;
+
+CREATE OR REPLACE FUNCTION remaining_slots(max_students INT, count bigint)
+returns VARCHAR(500)
+language plpgsql AS
+$$
+DECLARE
+   remaining_slots integer;
+BEGIN
+       remaining_slots = max_students - count;
+
+    IF remaining_slots <= 0 THEN
+        return 'No slots';
+    END IF;
+
+    return remaining_slots;
+END;
+$$;
+
+SELECT remaining_slots(max_students, count), * FROM ensambles_attendance
+    JOIN group_lesson AS g USING (lesson_id)
+    JOIN ensamble AS e USING (lesson_id)
+    ORDER BY genre DESC, EXTRACT(Day FROM start_time::timestamp);
+
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

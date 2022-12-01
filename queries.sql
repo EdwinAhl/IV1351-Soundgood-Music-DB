@@ -1,5 +1,6 @@
 --A1: Show the number of lessons given per month during a specified year -------------------------------------
 
+-- All lessons
 SELECT COUNT(*) AS no_lessons FROM
 	(SELECT start_time FROM group_lesson 
 		UNION ALL 
@@ -9,18 +10,21 @@ SELECT COUNT(*) AS no_lessons FROM
 		EXTRACT(MONTH FROM start_time::timestamp)=03
 ;
 
+-- All ensambles
 CREATE VIEW ensambles AS
 SELECT lesson_id, start_time FROM ensamble INNER JOIN group_lesson USING(lesson_id);
 
+-- All group lessons
 CREATE VIEW group_lessons AS
 SELECT lesson_id, start_time FROM group_lesson EXCEPT SELECT * FROM ensambles;
 
+-- All individual lessons
 CREATE VIEW individual_lessons AS
 SELECT lesson_id, start_time FROM individual_lesson;
 
 --- Print as 3 rows 
 SELECT type, COUNT(*) FROM 
-	(SELECT *, 'Ensable' as type FROM ensambles
+	(SELECT *, 'Ensamble' as type FROM ensambles
 		UNION ALL
 	SELECT *, 'Group' as type FROM group_lessons
 		UNION ALL 
@@ -30,6 +34,7 @@ SELECT type, COUNT(*) FROM
 		EXTRACT(MONTH FROM start_time::timestamp)=03
 	GROUP BY type;
 ;
+
 --------------------------------------------------------------------------------------------------------------
 
 
@@ -134,6 +139,7 @@ BEGIN
 END;
 $$;
 
+-- Ensambles
 SELECT * FROM (
 	SELECT * FROM ensambles_attendance
 		UNION ALL

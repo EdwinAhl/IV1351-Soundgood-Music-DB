@@ -11,15 +11,15 @@ SELECT COUNT(*) AS no_lessons FROM
 ;
 
 -- All ensambles
-CREATE VIEW ensambles AS
+CREATE OR REPLACE VIEW ensambles AS
 SELECT lesson_id, start_time FROM ensamble INNER JOIN group_lesson USING(lesson_id);
 
 -- All group lessons
-CREATE VIEW group_lessons AS
+CREATE OR REPLACE VIEW group_lessons AS
 SELECT lesson_id, start_time FROM group_lesson EXCEPT SELECT * FROM ensambles;
 
 -- All individual lessons
-CREATE VIEW individual_lessons AS
+CREATE OR REPLACE VIEW individual_lessons AS
 SELECT lesson_id, start_time FROM individual_lesson;
 
 --- Print as 3 rows 
@@ -63,17 +63,23 @@ ORDER BY no_siblings DESC;
 
 --- Using Views
 ---------------------------------------------------------------------------------
-CREATE VIEW all_lesson_times AS
+
+-- Creates one view with all the lesson times, from all types 
+CREATE OR REPLACE VIEW all_lesson_times AS
 SELECT start_time, lesson_id FROM group_lesson 
 	UNION ALL
 SELECT start_time, lesson_id FROM individual_lesson;
 
-CREATE VIEW monthly_lessons AS
+-- Creates a view of the lessons done and from which instructor during a specified month
+CREATE OR REPLACE VIEW monthly_lessons AS
 SELECT lesson_id, instructor_id FROM all_lesson_times
 INNER JOIN lesson AS all_lessons
 ON all_lesson_times.lesson_id = all_lessons.id
-WHERE EXTRACT(MONTH FROM start_time::timestamp)=03;
+WHERE EXTRACT(MONTH FROM start_time::timestamp)=03
+AND EXTRACT(YEAR FROM start_time::timestamp)=2020;
 
+-- Joins the monthly lessons with the instructor names
+-- To count how many lessons are done by which instructors during a specified month.
 SELECT p.name, id_table.count
 	FROM (SELECT instructors.person_id, COUNT(*)
 		FROM monthly_lessons

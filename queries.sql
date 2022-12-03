@@ -134,19 +134,19 @@ SELECT p.name, id_table.count
 
 -- Create a small table with all ensambles with attendance
 CREATE OR REPLACE VIEW ensambles_attendance AS
-SELECT COUNT(*), lesson_id, genre FROM ensamble 
+SELECT COUNT(*) as booked_slots, lesson_id, genre FROM ensamble 
 JOIN student_lesson USING(lesson_id)
 GROUP BY lesson_id;
 
 -- Get remaining slots as 'No slots' or the remaining number, easily modifiable.
-CREATE OR REPLACE FUNCTION remaining_slots(max_students INT, count bigint)
+CREATE OR REPLACE FUNCTION remaining_slots(max_students INT, booked_slots bigint)
 returns VARCHAR(500)
 language plpgsql AS
 $$
 DECLARE
    remaining_slots integer;
 BEGIN
-       remaining_slots = max_students - count;
+       remaining_slots = max_students - booked_slots;
 
     IF remaining_slots <= 0 THEN
         return 'No slots';
@@ -157,11 +157,11 @@ END;
 $$;
 
 -- Ensambles
-SELECT * FROM (
+SELECT remaining_slots(max_students, booked_slots), * FROM (
 	SELECT * FROM ensambles_attendance
 		UNION ALL
 	-- Need to also include all those ensambles with no attendance
-	SELECT 0 as count, lesson_id, genre FROM ensamble 
+	SELECT 0 as booked_slots, lesson_id, genre FROM ensamble 
 		-- Remove the ones where we already have attendance
 		EXCEPT SELECT 0, lesson_id, genre FROM ensambles_attendance) AS ensambles_info
     -- Join to get group info

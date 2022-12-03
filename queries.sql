@@ -35,10 +35,21 @@ SELECT type, COUNT(*) FROM
 
 --A2: Show how many students there are with no sibling, with one sibling, with two siblings, etc -------------
 
-SELECT COUNT(*) AS no_students ,result.count AS no_siblings FROM (
+-- Create view with the students who have siblings
+CREATE OR REPLACE VIEW student_sibling_count AS
+SELECT COUNT(*) AS no_students, count AS no_siblings FROM (
     SELECT COUNT(*) FROM sibling_student 
     GROUP BY student_id1
-) AS result GROUP BY result.count ORDER BY no_siblings DESC;
+) AS result
+GROUP BY count;
+
+-- Join the view and calculate the amount of students with no siblings
+SELECT COUNT(*) - (SELECT SUM(no_students) FROM student_sibling_count) AS no_students,
+0 AS no_siblings 
+FROM student
+UNION ALL 
+SELECT * FROM student_sibling_count
+ORDER BY no_siblings DESC;
 
 --------------------------------------------------------------------------------------------------------------
 

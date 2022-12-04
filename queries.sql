@@ -91,8 +91,8 @@ CREATE OR REPLACE VIEW monthly_lessons AS
 SELECT lesson_id, instructor_id FROM all_lesson_times
 INNER JOIN lesson AS all_lessons
 ON all_lesson_times.lesson_id = all_lessons.id
-WHERE EXTRACT(MONTH FROM start_time)=03
-AND EXTRACT(YEAR FROM start_time)=2020;
+WHERE DATE_TRUNC('month', CURRENT_TIMESTAMP)=DATE_TRUNC('month', start_time)
+;
 
 -- Joins the monthly lessons with the instructor names
 -- To count how many lessons are done by which instructors during a specified month.

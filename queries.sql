@@ -7,11 +7,12 @@ SELECT start_time, lesson_id FROM group_lesson
 SELECT start_time, lesson_id FROM individual_lesson;
 
 -- All lessons
-SELECT COUNT(*) AS no_lessons FROM
+SELECT EXTRACT(MONTH FROM start_time) AS month, COUNT(*) AS no_lessons FROM
 	all_lesson_times
-	WHERE 
-		EXTRACT(YEAR FROM start_time)=2020 AND 
-		EXTRACT(MONTH FROM start_time)=03
+	WHERE
+		EXTRACT(YEAR FROM start_time)=2020
+		GROUP BY month
+		ORDER BY month
 ;
 
 -- All ensambles
@@ -26,17 +27,34 @@ SELECT lesson_id, start_time FROM group_lesson EXCEPT SELECT * FROM ensambles;
 CREATE OR REPLACE VIEW individual_lessons AS
 SELECT lesson_id, start_time FROM individual_lesson;
 
---- Print as 3 rows 
-SELECT type, COUNT(*) FROM 
-	(SELECT *, 'Ensamble' as type FROM ensambles
+
+-- Show using columns (fancy)
+SELECT 
+	EXTRACT(MONTH FROM start_time) AS month,
+	SUM(CASE WHEN type = 1 THEN 1 ELSE 0 END) AS ensamble,
+	SUM(CASE WHEN type = 2 THEN 1 ELSE 0 END) AS group, 
+	SUM(CASE WHEN type = 3 THEN 1 ELSE 0 END) AS individual FROM
+		(SELECT *, 1 AS type FROM ensambles
+			UNION ALL
+		SELECT *, 2 FROM group_lessons
+			UNION ALL 
+		SELECT *, 3 FROM individual_lessons) AS all_lessons
+		WHERE EXTRACT(YEAR FROM start_time)=2020
+		GROUP BY month
+		ORDER BY month
+;
+
+--- Show using rows
+SELECT EXTRACT(MONTH FROM start_time) AS month, type, COUNT(*) FROM 
+	(SELECT *, 'Ensamble' AS type FROM ensambles
 		UNION ALL
-	SELECT *, 'Group' as type FROM group_lessons
+	SELECT *, 'Group' AS type FROM group_lessons
 		UNION ALL 
-	SELECT *, 'Individual' as type FROM individual_lessons) as all_lessons
+	SELECT *, 'Individual' AS type FROM individual_lessons) AS all_lessons
 	WHERE 
-		EXTRACT(YEAR FROM start_time)=2020 AND 
-		EXTRACT(MONTH FROM start_time)=03
-	GROUP BY type;
+		EXTRACT(YEAR FROM start_time)=2020
+	GROUP BY type, month
+	ORDER BY month
 ;
 
 --------------------------------------------------------------------------------------------------------------

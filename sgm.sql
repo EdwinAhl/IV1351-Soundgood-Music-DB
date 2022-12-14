@@ -53,6 +53,7 @@ ALTER TABLE instructor ADD CONSTRAINT PK_instructor PRIMARY KEY (id);
 
 CREATE TABLE lease (
  id INT GENERATED ALWAYS AS IDENTITY NOT NULL,
+ instrument_id INT,
  student_id INT NOT NULL,
  start_day DATE NOT NULL,
  end_day DATE
@@ -82,7 +83,7 @@ ALTER TABLE person_phone ADD CONSTRAINT PK_person_phone PRIMARY KEY (person_id,p
 
 CREATE TABLE rentable_instrument (
  id INT GENERATED ALWAYS AS IDENTITY NOT NULL,
- lease_id INT,
+ -- lease_id INT,
  price INT NOT NULL,
  type VARCHAR(100) NOT NULL,
  quality VARCHAR(100) NOT NULL,
@@ -145,6 +146,7 @@ ALTER TABLE instructor ADD CONSTRAINT FK_instructor_0 FOREIGN KEY (person_id) RE
 
 
 ALTER TABLE lease ADD CONSTRAINT FK_lease_0 FOREIGN KEY (student_id) REFERENCES student (id);
+ALTER TABLE lease ADD CONSTRAINT FK_lease_1 FOREIGN KEY (instrument_id) REFERENCES rentable_instrument (id);
 
 
 ALTER TABLE lesson ADD CONSTRAINT FK_lesson_0 FOREIGN KEY (instructor_id) REFERENCES instructor (id);
@@ -155,7 +157,7 @@ ALTER TABLE person_phone ADD CONSTRAINT FK_person_phone_0 FOREIGN KEY (person_id
 ALTER TABLE person_phone ADD CONSTRAINT FK_person_phone_1 FOREIGN KEY (phone_id) REFERENCES phone (id);
 
 
-ALTER TABLE rentable_instrument ADD CONSTRAINT FK_rentable_instrument_0 FOREIGN KEY (lease_id) REFERENCES lease (id);
+-- ALTER TABLE rentable_instrument ADD CONSTRAINT FK_rentable_instrument_0 FOREIGN KEY (lease_id) REFERENCES lease (id);
 
 
 ALTER TABLE sibling_student ADD CONSTRAINT FK_sibling_student_0 FOREIGN KEY (student_id1) REFERENCES student (id);

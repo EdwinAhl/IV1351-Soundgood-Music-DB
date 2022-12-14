@@ -116,15 +116,20 @@ VALUES
 (4,5),
 (5,4);
 
-INSERT INTO lease(student_id, start_day, end_day)
+INSERT INTO lease(student_id, instrument_id, start_day, end_day)
 VALUES
-(2, '2022-11-24', '2022-12-24');
+(2, NULL, '2022-11-24', '2022-12-24');
 
-INSERT INTO rentable_instrument(type, price, quality, brand, lease_id)
+INSERT INTO rentable_instrument(type, price, quality, brand)
 VALUES
-('Guitar', 120, 'OK', 'Harley Benton', NULL),
-('Piano', 200, 'Very good', 'Roland', NULL),
-('Drums', 200, 'Well used', 'Ludwig', 1);
+('Guitar', 120, 'OK', 'Harley Benton'),
+('Piano', 200, 'Very good', 'Roland'),
+('Drums', 200, 'Well used', 'Ludwig');
+
+UPDATE lease
+SET instrument_id = 3
+WHERE id = 1;
+
 
 INSERT INTO price(difficulty, lesson_type, base_price)
 VALUES

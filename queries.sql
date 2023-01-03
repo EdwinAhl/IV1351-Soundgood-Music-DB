@@ -83,27 +83,21 @@ ORDER BY no_siblings DESC;
 
 --A3: List all instructors who has given more than a specific number of lessons during the current month. Sum all lessons, independent of type, and sort the result by the number of given lessons. ---------------------------
 
---- Using Views
----------------------------------------------------------------------------------
-
--- Creates a view of the lessons done and from which instructor during the current month
-CREATE OR REPLACE VIEW monthly_lessons AS
-SELECT lesson_id, instructor_id FROM all_lesson_times
-INNER JOIN lesson AS all_lessons
-ON all_lesson_times.lesson_id = all_lessons.id
-WHERE DATE_TRUNC('month', CURRENT_TIMESTAMP)=DATE_TRUNC('month', start_time);
-
 -- Joins the monthly lessons with the instructor names
 -- To count how many lessons are done by which instructors during a specified month.
 SELECT p.name, id_table.count
     FROM (SELECT instructors.person_id, COUNT(*)
-        FROM monthly_lessons
+        FROM all_lesson_times
+        -- Join with lesson to get instructor id linked to lesson
+        INNER JOIN lesson AS all_lessons
+        ON all_lesson_times.lesson_id = all_lessons.id
         INNER JOIN
         -- Join with instructors based on instruct id
         instructor AS instructors
-        ON instructors.id = monthly_lessons.instructor_id 
+        ON instructors.id = instructor_id
+        WHERE DATE_TRUNC('month', CURRENT_TIMESTAMP)=DATE_TRUNC('month', start_time)
         -- Group by the instructor ids to get a count of lessons by instructor
-        GROUP BY monthly_lessons.instructor_id, instructors.id) as id_table
+        GROUP BY instructors.id) as id_table
 
     -- Join with person to get the names
     INNER JOIN person as p

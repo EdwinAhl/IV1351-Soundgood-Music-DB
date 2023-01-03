@@ -142,7 +142,7 @@ SELECT p.name, id_table.count
 --A4: List all ensembles held during the next week, sorted by music genre and weekday. For each ensemble tell whether it's full booked, has 1-2 seats left or has more seats left ---------------------
 
 -- Create a small table with all ensambles with attendance
-CREATE OR REPLACE VIEW ensambles_attendance AS
+CREATE MATERIALIZED VIEW ensambles_attendance AS
 SELECT COUNT(*) as booked_slots, lesson_id, genre FROM ensamble 
 JOIN student_lesson USING(lesson_id)
 GROUP BY lesson_id;
